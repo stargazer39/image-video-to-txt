@@ -4,7 +4,38 @@ import time
 import os
 import pyautogui
 
+video = cv2.VideoCapture('assets/orig-vid.webm')
+frameRate = 15
+screenshot = False
+printToConsole = True
+
+def main():
+    input("Press Enter to continue...")
+    frameCount = 0
+    while True:
+        startTime = time.time()
+        success,frame = video.read()
+        if not success:
+            print("Video probably not supported or not found.")
+            break
+        scaledFrame = cv2.resize(frame,dsize=(0,0),fx=0.15,fy=0.07,interpolation=cv2.INTER_CUBIC)
+        grayFrame = cv2.cvtColor(scaledFrame,cv2.COLOR_RGB2GRAY)
+        invertedFrame = cv2.bitwise_not(grayFrame)
+        finalFrame = invertedFrame / 255.0;
+
+        if printToConsole :
+            printFrame(finalFrame.astype(int))
+        endTime = time.time();
+
+        time.sleep((1/frameRate));
+        if screenshot :
+            takeScreenshot("out/image-%d.png" % frameCount)
+        clear()
+        frameCount += 1
+        #break
+    
 clear = lambda: os.system('cls')
+
 def printFrame (frame):
     out = ""
     for i in frame:
@@ -32,32 +63,7 @@ def takeScreenshot(filename):
     # writing it to the disk using opencv
     cv2.imwrite(filename, image)
 
-video = cv2.VideoCapture('assets/[HD] Touhou - Bad Apple!! [ＰＶ] (Shadow Art)-UkgK8eUdpAo.f247.webm')
-frameCount = 0
-frameRate = 15
 
-input("Press Enter to continue...")
-while True:
-    startTime = time.time()
-    success,frame = video.read()
-    if not success:
-        break;
-    scaledFrame = cv2.resize(frame,dsize=(0,0),fx=0.15,fy=0.07,interpolation=cv2.INTER_CUBIC)
-    grayFrame = cv2.cvtColor(scaledFrame,cv2.COLOR_RGB2GRAY)
-    invertedFrame = cv2.bitwise_not(grayFrame)
-    finalFrame = invertedFrame / 255.0;
-
-    #print(finalFrame.shape);
-    #np.savetxt('lel.txt',finalFrame,delimiter=' ',newline='\n')
-    
-    #print(endTime - startTime)
-    #break
-    printFrame(finalFrame.astype(int))
-    endTime = time.time();
-    time.sleep((1/frameRate));
-    takeScreenshot("out/image-%d.png" % frameCount)
-    clear()
-    frameCount += 1
-    #break
-    
+if __name__ == "__main__":
+    main()
     

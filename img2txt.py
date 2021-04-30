@@ -4,6 +4,17 @@ import time
 import os
 import pyautogui
 
+def main():
+    img = cv2.imread('assets\outro.png')
+
+    input("Press Enter to continue...")
+    scaledFrame = cv2.resize(img,dsize=(0,0),fx=0.033,fy=0.017,interpolation=cv2.INTER_CUBIC)
+    grayFrame = cv2.cvtColor(scaledFrame,cv2.COLOR_RGB2GRAY)
+    invertedFrame = cv2.bitwise_not(grayFrame)
+    finalFrame = invertedFrame / 255.0;
+
+    printFrame(finalFrame)
+
 clear = lambda: os.system('cls')
 def printFrame (frame):
     out = ""
@@ -32,15 +43,7 @@ def takeScreenshot(filename):
     # writing it to the disk using opencv
     cv2.imwrite(filename, image)
 
-img = cv2.imread('assets\outro.png')
-
-input("Press Enter to continue...")
-scaledFrame = cv2.resize(img,dsize=(0,0),fx=0.033,fy=0.017,interpolation=cv2.INTER_CUBIC)
-grayFrame = cv2.cvtColor(scaledFrame,cv2.COLOR_RGB2GRAY)
-invertedFrame = cv2.bitwise_not(grayFrame)
-finalFrame = invertedFrame / 255.0;
-
-printFrame(finalFrame)
-
+if __name__ == "__main__":
+    main()
     
     
